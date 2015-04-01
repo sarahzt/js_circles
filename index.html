@@ -1,6 +1,19 @@
 <html>
 <head>
 	<title>Javascript Box - OOP demo</title>
+
+	<style type="text/css">
+		body {
+			border:1px solid #000000;
+			/*width:600px;
+			height:400px;*/
+		}
+
+		#svg { 
+			width:100%;
+			height:400%;
+		}
+	</style>
 </head>
 <body>
 
@@ -10,7 +23,7 @@
 	function Circle(cx, cy, html_id)
 	{
 		var html_id = html_id;
-		this.info = { cx: cx,  cy: cy };
+		this.info = { cx: cx,  cy: cy, r:10 };
 		
 		//private function that generates a random number
 		var randomNumberBetween = function(min, max){
@@ -28,10 +41,14 @@
 			var circle = makeSVG('circle', 
 				{ 	cx: this.info.cx,
 				  	cy: this.info.cy,
-				  	r:  10,
+				  	r:  this.info.r,
 				  	id: html_id,
 				  	style: "fill: black"
 				});
+
+			// this.getRadius = function(){
+			// 	return this.circle.r;
+			// }
 
 			document.getElementById('svg').appendChild(circle);
 		}
@@ -40,14 +57,18 @@
 			var el = document.getElementById(html_id);
 
 			//see if the circle is going outside the browser. if it is, reverse the velocity
-			if( this.info.cx > document.body.clientWidth || this.info.cx < 0)
+			if( this.info.cx > document.body.clientWidth - (this.info.r * 2) || this.info.cx < this.info.r) // 10 is the radius
 			{
 				this.info.velocity.x = this.info.velocity.x * -1;
+				// console.log("cx: " + this.info.cx  + " , cy: " + this.info.cy);
 			}
-			if( this.info.cy > document.body.clientHeight || this.info.cy < 0)
+			if( this.info.cy > document.body.clientHeight - (this.info.r * 2) || this.info.cy < this.info.r)
 			{
 				this.info.velocity.y = this.info.velocity.y * -1;
+				// console.log("cx: " + this.info.cx  + " , cy: " + this.info.cy);
 			}
+
+			// the circle appear to be going out of bounds because the center of the circle - not the outside - is the point from which this is calculated? answer is to add the circle's radius (in this case, 10) to the 
 
 			this.info.cx = this.info.cx + this.info.velocity.x*time;
 			this.info.cy = this.info.cy + this.info.velocity.y*time;
